@@ -2,6 +2,10 @@
 
 This document explains the code structure and functionality of the Match-3 Chess game.
 
+For instructions on how to play the game, please see the [How to Play Guide](howto.md).
+
+Created by [Andrew Wooldridge](https://andreww.xyz)
+
 ## File Structure
 
 - `index.html`: The main HTML file that defines the structure of the game page
