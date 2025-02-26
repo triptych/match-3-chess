@@ -1,4 +1,11 @@
+/**
+ * Match3Chess - A game that combines chess piece movements with match-3 mechanics
+ */
 class Match3Chess {
+    /**
+     * Initializes a new Match3Chess game
+     * Creates the game board, sets up initial state and event listeners
+     */
     constructor() {
         this.board = [];
         this.selectedCell = null;
@@ -9,6 +16,10 @@ class Match3Chess {
         this.initializeBoard();
     }
 
+    /**
+     * Creates the initial 8x8 game board with random chess pieces
+     * Sets up the DOM elements and event listeners for each cell
+     */
     initializeBoard() {
         // Create 8x8 board
         for (let row = 0; row < 8; row++) {
@@ -30,6 +41,13 @@ class Match3Chess {
         }
     }
 
+    /**
+     * Handles user clicks on board cells
+     * Manages piece selection, movement, and game state updates
+     *
+     * @param {number} row - The row index of the clicked cell
+     * @param {number} col - The column index of the clicked cell
+     */
     handleCellClick(row, col) {
         const cell = this.getCellElement(row, col);
 
@@ -47,6 +65,12 @@ class Match3Chess {
         }
     }
 
+    /**
+     * Marks a cell as selected and highlights valid moves
+     *
+     * @param {number} row - The row index of the cell to select
+     * @param {number} col - The column index of the cell to select
+     */
     selectCell(row, col) {
         const cell = this.getCellElement(row, col);
         cell.classList.add('selected');
@@ -54,6 +78,12 @@ class Match3Chess {
         this.highlightValidMoves(row, col);
     }
 
+    /**
+     * Highlights all valid moves for the piece at the specified position
+     *
+     * @param {number} row - The row index of the piece
+     * @param {number} col - The column index of the piece
+     */
     highlightValidMoves(row, col) {
         const piece = this.board[row][col];
         const moves = this.getValidMoves(row, col, piece);
@@ -64,6 +94,14 @@ class Match3Chess {
         });
     }
 
+    /**
+     * Determines all valid moves for a chess piece based on its type and position
+     *
+     * @param {number} row - The row index of the piece
+     * @param {number} col - The column index of the piece
+     * @param {string} piece - The chess piece emoji character
+     * @returns {Array<{row: number, col: number}>} Array of valid move positions
+     */
     getValidMoves(row, col, piece) {
         const moves = [];
 
@@ -105,6 +143,14 @@ class Match3Chess {
         return moves;
     }
 
+    /**
+     * Calculates all possible diagonal moves from a position
+     * Used for bishop, queen movement patterns
+     *
+     * @param {number} row - The starting row index
+     * @param {number} col - The starting column index
+     * @returns {Array<{row: number, col: number}>} Array of valid diagonal move positions
+     */
     getDiagonalMoves(row, col) {
         const moves = [];
         const directions = [[-1,-1], [-1,1], [1,-1], [1,1]];
@@ -122,6 +168,14 @@ class Match3Chess {
         return moves;
     }
 
+    /**
+     * Calculates all possible straight (horizontal/vertical) moves from a position
+     * Used for rook, queen movement patterns
+     *
+     * @param {number} row - The starting row index
+     * @param {number} col - The starting column index
+     * @returns {Array<{row: number, col: number}>} Array of valid straight move positions
+     */
     getStraightMoves(row, col) {
         const moves = [];
         const directions = [[-1,0], [1,0], [0,-1], [0,1]];
@@ -139,10 +193,23 @@ class Match3Chess {
         return moves;
     }
 
+    /**
+     * Checks if a position is within the game board boundaries
+     *
+     * @param {number} row - The row index to check
+     * @param {number} col - The column index to check
+     * @returns {boolean} True if the position is on the board, false otherwise
+     */
     isOnBoard(row, col) {
         return row >= 0 && row < 8 && col >= 0 && col < 8;
     }
 
+    /**
+     * Swaps two pieces on the board and checks for matches
+     *
+     * @param {Object} from - The source position {row, col}
+     * @param {Object} to - The destination position {row, col}
+     */
     swapPieces(from, to) {
         // Swap pieces in data structure
         const temp = this.board[from.row][from.col];
@@ -160,6 +227,12 @@ class Match3Chess {
         setTimeout(() => this.checkMatches(), 300);
     }
 
+    /**
+     * Checks the entire board for matches of three or more identical pieces
+     * Looks for horizontal, vertical, and diagonal matches
+     *
+     * @returns {boolean} True if matches were found, false otherwise
+     */
     checkMatches() {
         const matches = new Set();
 
@@ -223,6 +296,12 @@ class Match3Chess {
         return false;
     }
 
+    /**
+     * Removes matched pieces from the board and updates the score
+     * Triggers the falling animation for pieces above
+     *
+     * @param {Set<string>} matches - Set of position strings ("row,col") to remove
+     */
     removeMatches(matches) {
         // Update score
         this.score += matches.size * 100;
@@ -252,6 +331,10 @@ class Match3Chess {
         }
     }
 
+    /**
+     * Handles the falling animation of pieces after matches are removed
+     * Fills empty spaces with new random pieces
+     */
     handleFalling() {
         let piecesToFall = 0;
         let piecesFallen = 0;
@@ -323,10 +406,21 @@ class Match3Chess {
         }
     }
 
+    /**
+     * Gets the DOM element for a cell at the specified position
+     *
+     * @param {number} row - The row index of the cell
+     * @param {number} col - The column index of the cell
+     * @returns {HTMLElement} The DOM element for the specified cell
+     */
     getCellElement(row, col) {
         return this.boardElement.children[row * 8 + col];
     }
 
+    /**
+     * Removes all highlighting from cells on the board
+     * Clears 'selected' and 'valid-move' CSS classes
+     */
     clearHighlights() {
         const cells = this.boardElement.getElementsByClassName('cell');
         for (const cell of cells) {
@@ -334,6 +428,14 @@ class Match3Chess {
         }
     }
 
+    /**
+     * Checks if a move from one position to another is valid
+     * Based on the chess piece's movement rules
+     *
+     * @param {Object} from - The source position {row, col}
+     * @param {Object} to - The destination position {row, col}
+     * @returns {boolean} True if the move is valid, false otherwise
+     */
     isValidMove(from, to) {
         const moves = this.getValidMoves(from.row, from.col, this.board[from.row][from.col]);
         return moves.some(move => move.row === to.row && move.col === to.col);

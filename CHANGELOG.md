@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Renamed readme.txt to readme.md to use proper markdown extension
 - Renamed howto.txt to howto.md for consistent markdown formatting
 - Updated readme.md content
+- Added descriptive header comment to game.js explaining the game concept
 
 ### Added (Previous Update)
 - Documentation
