@@ -1,0 +1,146 @@
+:root {
+    --primary-color: #6c5ce7;
+    --secondary-color: #a29bfe;
+    --board-light: #ffeaa7;
+    --board-dark: #fab1a0;
+    --highlight-color: #00cec9;
+    --valid-move: rgba(0, 206, 201, 0.5);
+    --selected: rgba(108, 92, 231, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.game-container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    max-width: 800px;
+    width: 100%;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.score-container {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    font-weight: bold;
+}
+
+.board-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2px;
+    background: #2d3436;
+    padding: 4px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cell {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 4px;
+}
+
+.cell.light {
+    background-color: var(--board-light);
+}
+
+.cell.dark {
+    background-color: var(--board-dark);
+}
+
+.cell.selected {
+    background-color: var(--selected);
+}
+
+.cell.valid-move {
+    background-color: var(--valid-move);
+}
+
+.cell:hover {
+    transform: scale(1.05);
+    z-index: 1;
+}
+
+.game-info {
+    text-align: center;
+    color: #2d3436;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+}
+
+@keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fall {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(0); }
+}
+
+.cell.pop {
+    animation: pop 0.3s ease;
+}
+
+.cell.fall {
+    animation: fall 0.5s ease;
+}
+
+@media (max-width: 600px) {
+    .cell {
+        width: 40px;
+        height: 40px;
+        font-size: 2rem;
+    }
+
+    .game-container {
+        padding: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+}
