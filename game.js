@@ -228,6 +228,10 @@ class Match3Chess {
         this.score += matches.size * 100;
         this.scoreElement.textContent = this.score;
 
+        // Track number of pieces being removed
+        let piecesToRemove = matches.size;
+        let piecesRemoved = 0;
+
         // Remove matched pieces
         for (const pos of matches) {
             const [row, col] = pos.split(',').map(Number);
@@ -238,15 +242,36 @@ class Match3Chess {
             setTimeout(() => {
                 cell.textContent = '';
                 cell.classList.remove('pop');
-                this.handleFalling();
+                piecesRemoved++;
+
+                // Only proceed with falling pieces after all matches are removed
+                if (piecesRemoved === piecesToRemove) {
+                    this.handleFalling();
+                }
             }, 300);
         }
     }
 
     handleFalling() {
-        let fell = false;
+        let piecesToFall = 0;
+        let piecesFallen = 0;
 
-        // Move pieces down
+        // First pass: count how many pieces need to fall
+        for (let col = 0; col < 8; col++) {
+            let emptySpaces = 0;
+            for (let row = 7; row >= 0; row--) {
+                if (this.board[row][col] === null) {
+                    emptySpaces++;
+                } else if (emptySpaces > 0) {
+                    piecesToFall++;
+                }
+            }
+            piecesToFall += emptySpaces; // Count new pieces that need to be added
+        }
+
+        if (piecesToFall === 0) return;
+
+        // Second pass: handle falling pieces
         for (let col = 0; col < 8; col++) {
             let emptySpaces = 0;
 
@@ -266,15 +291,18 @@ class Match3Chess {
                     sourceCell.textContent = '';
                     targetCell.classList.add('fall');
 
-                    setTimeout(() => targetCell.classList.remove('fall'), 500);
-                    fell = true;
+                    setTimeout(() => {
+                        targetCell.classList.remove('fall');
+                        piecesFallen++;
+                        if (piecesFallen === piecesToFall) {
+                            this.checkMatches();
+                        }
+                    }, 500);
                 }
             }
-        }
 
-        // Fill empty spaces with new pieces
-        for (let row = 0; row < 8; row++) {
-            for (let col = 0; col < 8; col++) {
+            // Fill empty spaces with new pieces
+            for (let row = 0; row < 8; row++) {
                 if (this.board[row][col] === null) {
                     const newPiece = this.pieces[Math.floor(Math.random() * this.pieces.length)];
                     this.board[row][col] = newPiece;
@@ -283,14 +311,15 @@ class Match3Chess {
                     cell.textContent = newPiece;
                     cell.classList.add('fall');
 
-                    setTimeout(() => cell.classList.remove('fall'), 500);
-                    fell = true;
+                    setTimeout(() => {
+                        cell.classList.remove('fall');
+                        piecesFallen++;
+                        if (piecesFallen === piecesToFall) {
+                            this.checkMatches();
+                        }
+                    }, 500);
                 }
             }
-        }
-
-        if (fell) {
-            setTimeout(() => this.checkMatches(), 500);
         }
     }
 
