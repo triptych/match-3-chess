@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
 - Renamed howto.txt to howto.md for consistent markdown formatting
 - Updated readme.md content
 - Added descriptive header comment to game.js explaining the game concept
+- Updated MIT license link in footer to point directly to GitHub repository instead of using a relative link
 
 ### Added (Previous Update)
 - Documentation
